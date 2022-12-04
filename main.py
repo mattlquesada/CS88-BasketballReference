@@ -1,6 +1,7 @@
 # CS88: Basketball Reference Project
 
 import pandas as pd
+from pymongo import MongoClient
 
 # Read all the csv files into a joint pandas DF
 
@@ -64,6 +65,40 @@ def clean_and_format_data(dataframe):
     dataframe = dataframe[dataframe.Tm != 'TOT']
 
     return dataframe
+
+
+def upload_to_mongoDB(df):
+
+    CONNECTION_STRING = ""
+    client = MongoClient(CONNECTION_STRING)
+
+    # Database
+    mongo_database = client['testBasketballReference']
+
+    # Collection
+    per_game_statistics = mongo_database["testplayer_stats"]
+
+    # collection_name.insert_one(item)
+
+    # Iterate through the data frame, create an "item" and based on the row value
+    for index, row in df.iterrows:
+        document = {
+            "Rk": None,
+            "Player": None,
+            "Pos": None,
+            "Age": None,
+            "Tm": None,
+            "G": None,
+            "GS": None,
+            "MP": None,
+
+        }
+        # Insert the row as a document into MongoDO
+        per_game_statistics.insert_one(document)
+
+
+
+
 
 def _check_if_same_columns():
 
