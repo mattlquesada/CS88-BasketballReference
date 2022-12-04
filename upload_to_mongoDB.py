@@ -4,15 +4,15 @@ import pandas as pd
 from pymongo import MongoClient
 import certifi
 
-def read_in_data():
+
+def read_in_data(data_directory):
     """
     read_in_data: Iterates through input file directory for all raw csv file inputs. Consolidates into single dataframe.
     Also adds additional column with the year. The year will refer to the year the season started.
     :return:
     :rtype:
     """
-    # data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/test_data/"
-    data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/data/"
+
     season_yr_pre_min = 1949
     season_yr_pre_max = 2021
 
@@ -41,6 +41,13 @@ def read_in_data():
 
 
 def clean_and_format_data(dataframe):
+    """
+    clean_and_format_data: Sets NaN values to 0 for 3-pointer related statistics. Removes rows where <10 games played.
+    :param dataframe:
+    :type dataframe:
+    :return:
+    :rtype:
+    """
 
     # Set all NaN 3-pointer related statistics to 0
     dataframe['3P'] = dataframe['3P'].fillna(0)
@@ -56,17 +63,16 @@ def clean_and_format_data(dataframe):
     return dataframe
 
 
-def upload_to_mongoDB(df):
-
+def upload_to_mongoDB(df, database_name, collection_name):
 
     CONNECTION_STRING = "mongodb+srv://mattcs88:ballislife1221ref@cluster0.f5msv.mongodb.net/?retryWrites=true&w=majority"
     client = MongoClient(CONNECTION_STRING, tlsCAFile=certifi.where())
 
     # Database
-    mongo_database = client['BasketballReference']
+    mongo_database = client[database_name]
 
     # Collection
-    per_game_statistics = mongo_database["PlayerStats"]
+    per_game_statistics = mongo_database[collection_name]
 
     # Iterate through the data frame, create an "item" and based on the row value
     for index, row in df.iterrows():
@@ -108,51 +114,18 @@ def upload_to_mongoDB(df):
         per_game_statistics.insert_one(document)
 
 
-
-def _check_if_same_columns():
-
-    # data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/test_data/"
-    data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/data/"
-    season_yr_pre_min = 1949
-    season_yr_pre_max = 2021
-
-    prev_columns = None
-    current_columns = None
-
-    # Iterate through all files in the specified data file directory
-    for season_yr_pre in range(season_yr_pre_min, season_yr_pre_max + 1):
-        season_yr_post = season_yr_pre + 1
-        current_filename = str(season_yr_pre) + '-' + str(season_yr_post) + '.csv'
-
-        filepath = data_directory + current_filename
-        # print("filepath: {}".format(filepath))
-
-        try:
-            df = pd.read_csv(filepath)
-            # print(df)
-            current_columns = list(df.columns)
-            if prev_columns is not None:  # First input file being inspected
-
-                if current_columns == prev_columns:
-                    print("Match Found")
-                else:
-                    print("Error: Match Not Found")
-
-            prev_columns = current_columns
-
-        except FileNotFoundError:
-            print("\n\nERROR: {} was not found\n\n".format(filepath))
-
-
 def main():
-    full_df = read_in_data()
-    print("FULL DF: {}".format(full_df))
 
-    cleaned_df = clean_and_format_data(full_df)
-    print("CLEANED DF: {}".format(cleaned_df))
-    #check_if_same_columns()
+    # Read in NBA player statistics stored in local directory
+    data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/data/"
+    full_df = read_in_data(data_directory=data_directory)
+    # print("FULL DF: {}".format(full_df))
 
-    upload_to_mongoDB(cleaned_df)
+    cleaned_df = clean_and_format_data(dataframe=full_df)
+    # print("CLEANED DF: {}".format(cleaned_df))
+
+    # Upload the cleaned dataframe to mongoDB
+    upload_to_mongoDB(df=cleaned_df, database_name="BasketballReference", collection_name="PlayerStats")
 
 
 if __name__ == "__main__":
