@@ -91,7 +91,28 @@ def upload_to_mongoDB(df):
             "G": None,
             "GS": None,
             "MP": None,
-
+            "FG": None,
+            "FGA": None,
+            "FG%": None,
+            "3P": None,
+            "3PA": None,
+            "3P%": None,
+            "2P": None,
+            "2PA": None,
+            "2P%": None,
+            "eFG%": None,
+            "FT": None,
+            "FTA": None,
+            "ORB": None,
+            "TRB": None,
+            "AST": None,
+            "STL": None,
+            "BLK": None,
+            "TOV": None,
+            "PF": None,
+            "PTS": None,
+            "Player-additional": None,
+            "Year": None
         }
         # Insert the row as a document into MongoDO
         per_game_statistics.insert_one(document)
