@@ -14,7 +14,6 @@ import pandas as pd
 
 # Iterate through the dataframe; create dict/json object, upload to mongo
 
-
 def read_in_data():
     """
     read_in_data: Iterates through input file directory for all raw csv file inputs. Consolidates into single dataframe.
@@ -51,7 +50,18 @@ def read_in_data():
     return df
 
 
-def check_if_same_columns():
+def clean_and_format_data(dataframe):
+
+    # Set all NaN 3-pointer related statistics to 0
+    dataframe['3P'] = dataframe['3P'].fillna(0)
+    dataframe['3PA'] = dataframe['3PA'].fillna(0)
+    dataframe['3P%'] = dataframe['3P%'].fillna(0)
+
+    # dataframe['PTS'] = dataframe['PTS'].fillna(0)
+
+    return dataframe
+
+def _check_if_same_columns():
 
     # data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/test_data/"
     data_directory = "/Users/mquesada/PycharmProjects/CS88-BasketballReference/data/"
@@ -73,7 +83,7 @@ def check_if_same_columns():
             df = pd.read_csv(filepath)
             # print(df)
             current_columns = list(df.columns)
-            if prev_columns is not None:    # First input file being inspected
+            if prev_columns is not None:  # First input file being inspected
 
                 if current_columns == prev_columns:
                     print("Match Found")
@@ -88,7 +98,10 @@ def check_if_same_columns():
 
 def main():
     full_df = read_in_data()
-    print(full_df)
+    print("FULL DF: {}".format(full_df))
+
+    cleaned_df = clean_and_format_data(full_df)
+    print("CLEANED DF: {}".format(cleaned_df))
     #check_if_same_columns()
 
 
