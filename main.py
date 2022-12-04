@@ -57,7 +57,11 @@ def clean_and_format_data(dataframe):
     dataframe['3PA'] = dataframe['3PA'].fillna(0)
     dataframe['3P%'] = dataframe['3P%'].fillna(0)
 
-    # dataframe['PTS'] = dataframe['PTS'].fillna(0)
+    # Remove all rows where Games played is less than 10
+    dataframe = dataframe[dataframe.G >= 10]
+
+    # Remove all rows where Team = TOT (only targeting the team specific rows)
+    dataframe = dataframe[dataframe.Tm != 'TOT']
 
     return dataframe
 
