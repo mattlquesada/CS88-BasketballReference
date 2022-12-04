@@ -78,48 +78,44 @@ def upload_to_mongoDB(df):
     # Collection
     per_game_statistics = mongo_database["testplayer_stats"]
 
-    # collection_name.insert_one(item)
-
     # Iterate through the data frame, create an "item" and based on the row value
     for index, row in df.iterrows:
         document = {
             "Rk": row["Rk"],
-            "Player": row["Rk"],
-            "Pos": row["Rk"],
-            "Age": row["Rk"],
-            "Tm": row["Rk"],
-            "G": row["Rk"],
-            "GS": row["Rk"],
-            "MP": row["Rk"],
-            "FG": row["Rk"],
-            "FGA": row["Rk"],
-            "FG%": row["Rk"],
-            "3P": row["Rk"],
-            "3PA": row["Rk"],
-            "3P%": row["Rk"],
-            "2P": row["Rk"],
-            "2PA": row["Rk"],
-            "2P%": row["Rk"],
-            "eFG%": row["Rk"],
-            "FT": row["Rk"],
-            "FTA": row["Rk"],
-            "FT%": row["Rk"],
-            "ORB": row["Rk"],
-            "DRB": row["Rk"],
-            "TRB": row["Rk"],
-            "AST": row["Rk"],
-            "STL": row["Rk"],
-            "BLK": row["Rk"],
-            "TOV": row["Rk"],
-            "PF": row["Rk"],
-            "PTS": row["Rk"],
-            "Player-additional": row["Rk"],
-            "Year": row["Rk"]
+            "Player": row["Player"],
+            "Pos": row["Pos"],
+            "Age": row["Age"],
+            "Tm": row["Tm"],
+            "G": row["G"],
+            "GS": row["GS"],
+            "MP": row["MP"],
+            "FG": row["FG"],
+            "FGA": row["FGA"],
+            "FG%": row["FG%"],
+            "3P": row["3P"],
+            "3PA": row["3PA"],
+            "3P%": row["3P%"],
+            "2P": row["2P"],
+            "2PA": row["2PA"],
+            "2P%": row["2P%"],
+            "eFG%": row["eFG%"],
+            "FT": row["FT"],
+            "FTA": row["FTA"],
+            "FT%": row["FT%"],
+            "ORB": row["ORB"],
+            "DRB": row["DRB"],
+            "TRB": row["TRB"],
+            "AST": row["AST"],
+            "STL": row["STL"],
+            "BLK": row["BLK"],
+            "TOV": row["TOV"],
+            "PF": row["PF"],
+            "PTS": row["PTS"],
+            "Player-additional": row["Player-additional"],
+            "Year": row["Year"]
         }
         # Insert the row as a document into MongoDO
         per_game_statistics.insert_one(document)
-
-
 
 
 
