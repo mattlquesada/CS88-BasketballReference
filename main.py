@@ -2,6 +2,7 @@
 
 import pandas as pd
 from pymongo import MongoClient
+import certifi
 
 # Read all the csv files into a joint pandas DF
 
@@ -69,8 +70,9 @@ def clean_and_format_data(dataframe):
 
 def upload_to_mongoDB(df):
 
-    CONNECTION_STRING = ""
-    client = MongoClient(CONNECTION_STRING)
+
+    CONNECTION_STRING = "mongodb+srv://mattcs88:ballislife1221ref@cluster0.f5msv.mongodb.net/?retryWrites=true&w=majority"
+    client = MongoClient(CONNECTION_STRING, tlsCAFile=certifi.where())
 
     # Database
     mongo_database = client['testBasketballReference']
@@ -79,7 +81,7 @@ def upload_to_mongoDB(df):
     per_game_statistics = mongo_database["testplayer_stats"]
 
     # Iterate through the data frame, create an "item" and based on the row value
-    for index, row in df.iterrows:
+    for index, row in df.iterrows():
         document = {
             "Rk": row["Rk"],
             "Player": row["Player"],
@@ -161,6 +163,8 @@ def main():
     cleaned_df = clean_and_format_data(full_df)
     print("CLEANED DF: {}".format(cleaned_df))
     #check_if_same_columns()
+
+    upload_to_mongoDB(cleaned_df)
 
 
 if __name__ == "__main__":
