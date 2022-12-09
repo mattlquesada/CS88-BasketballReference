@@ -1,0 +1,23 @@
+# Show databases
+show dbs
+
+# Show collections
+show collections
+
+# Show all player entries in the database
+db.getCollection("PlayerStats").find()
+
+# Show all player entries for Jordan Clarkson
+db.getCollection("PlayerStats").find({"Player": "Jordan Clarkson"})
+
+# Show all player entries for Jordan Clarkson (only when he was a Laker)
+db.getCollection("PlayerStats").find({"Player": "Jordan Clarkson", "Tm": "LAL"})
+
+# Show all player entries for players who scored more than 30ppg within the years 1985-2015
+db.getCollection("PlayerStats").find({"Year": {$gte:1985, $lte:2015}, "PTS":{$gte:30}})
+
+# Show all player entries for players who averaged more than 9 assists OR more than 11 rebounds and played for either the Lakers of the Celtics
+db.getCollection("PlayerStats").find({"Tm": {$in:["LAL", "BOS"]}, $or: [{"AST": {$gte: 10}}, {"TRB": {$gte: 20}}]})
+
+# Show all players who took more than 15FG attempts and shot greater than 50% FG%
+db.getCollection("PlayerStats").find({"FGA": {$gte:15}, "FG%": {$gte:0.5}, "Year":{$gte: 1980, $lte: 2005}})
